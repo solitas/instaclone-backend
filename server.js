@@ -1,19 +1,39 @@
 
-import {ApolloServer, gql} from "apollo-server";
+import { ApolloServer, gql } from "apollo-server";
 
 const typeDefs = gql`
- type Query {
-    hello: String
- }
+    type Movie {
+        title: String
+        year: Int
+    }
+    type Query {
+        movies: [Movie]
+        movie: Movie
+    }
+    type Mutation {
+        createMovie(title:String!): Boolean
+        deleteMovie(title: String!): Boolean
+    }
 `;
 
 const resolvers = {
     Query: {
-        hello: () => "data",
+        movies: () => [],
+        movie: () => ({ "title": "hello", year: 2000 })
     },
+    Mutation: {
+        createMovie: (_, { title }) => {
+            console.log(title)
+            return true
+        },
+        deleteMovie: (_, { title }) => {
+            console.log(title)
+            return true
+        },
+    }
 };
 
-const server = new ApolloServer( {
+const server = new ApolloServer({
     typeDefs,
     resolvers
 });
